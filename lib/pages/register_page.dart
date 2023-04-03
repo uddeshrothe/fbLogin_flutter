@@ -4,20 +4,21 @@ import 'package:loginapp/components/my_button.dart';
 import 'package:loginapp/components/my_textfield.dart';
 import 'package:loginapp/components/square_tile.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginPage({super.key, required this.onTap});
+  const RegisterPage({super.key, required this.onTap});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   //Sign in user method
-  void signUserIn() async {
+  void signUserUp() async {
     //Show loading screen
     showDialog(
         context: context,
@@ -26,15 +27,20 @@ class _LoginPageState extends State<LoginPage> {
             child: CircularProgressIndicator(),
           );
         });
-    //try sign in
 
+    //try signing up user
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
+      // confirm Password check
+      if (passwordController.text == confirmPasswordController.text) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+      } else {
+        //Error message
+        showErrorMessage("Passwords don't match");
+      }
       // Pop the loading screen
-      // ignore: use_build_context_synchronously
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
@@ -65,19 +71,19 @@ class _LoginPageState extends State<LoginPage> {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               const SizedBox(
-                height: 50,
+                height: 25,
               ),
               // logo
               const Icon(
                 Icons.lock,
-                size: 100,
+                size: 50,
               ),
               const SizedBox(
-                height: 50,
+                height: 25,
               ),
               //Welcome text
               Text(
-                'Welcome',
+                'Create an account',
                 style: TextStyle(color: Colors.grey[700], fontSize: 16),
               ),
 
@@ -104,28 +110,22 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 10,
               ),
-              //forgot password
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Forgot password?',
-                      style: TextStyle(color: Colors.grey[600]),
-                    ),
-                  ],
-                ),
+
+              //Confirm password
+              MyTextField(
+                controller: confirmPasswordController,
+                hintText: 'Confirm Password',
+                obscureText: true,
               ),
 
               const SizedBox(
-                height: 15,
+                height: 10,
               ),
-
+           
               //sign in
               MyButton(
-                onTap: signUserIn,
-                text: 'Sign In',
+                onTap: signUserUp,
+                text: 'Sign Up',
               ),
 
               const SizedBox(height: 50),
@@ -186,14 +186,14 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Not a member?',
+                    'Already have an account?',
                     style: TextStyle(color: Colors.grey[700]),
                   ),
                   const SizedBox(width: 4),
                   GestureDetector(
                     onTap: widget.onTap,
                     child: const Text(
-                      'Register Now',
+                      'Login Now',
                       style: TextStyle(
                           color: Colors.blue, fontWeight: FontWeight.bold),
                     ),
