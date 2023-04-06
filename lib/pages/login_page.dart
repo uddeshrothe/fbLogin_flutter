@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:loginapp/components/my_button.dart';
 import 'package:loginapp/components/my_textfield.dart';
 import 'package:loginapp/components/square_tile.dart';
+import 'package:loginapp/pages/forgot_password_page.dart';
 import 'package:loginapp/services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginPage({super.key, required this.onTap});
+  const LoginPage({super.key, this.onTap});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -111,9 +112,17 @@ class _LoginPageState extends State<LoginPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      'Forgot password?',
-                      style: TextStyle(color: Colors.grey[600]),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const ForgotPasswordPage();
+                        }));
+                      },
+                      child: Text(
+                        'Forgot password?',
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
                     ),
                   ],
                 ),
