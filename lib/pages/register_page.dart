@@ -56,7 +56,7 @@ class _RegisterPageState extends State<RegisterPage> {
           return AlertDialog(
             title: Text(
               message,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.black54),
             ),
           );
         });
