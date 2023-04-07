@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
           return AlertDialog(
             title: Text(
               message,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.black54),
             ),
           );
         });
